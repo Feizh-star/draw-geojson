@@ -7,7 +7,6 @@ const router = createRouter({
   routes: [
     {
       path: '/',
-      name: 'Layout',
       component: Layout,
       redirect: '/home',
       children: [
@@ -26,6 +25,21 @@ const router = createRouter({
             title: '关于'
           },
           component: () => import('../views/AboutView.vue')
+        },
+      ]
+    },
+    {
+      path: '/map',
+      component: Layout,
+      redirect: 'geojson',
+      children: [
+        {
+          path: 'geojson',
+          name: 'geojson',
+          meta: {
+            title: '输出GeoJSON'
+          },
+          component: () => import('../views/DrawMap/DrawMapCanvas.vue')
         },
       ]
     },

@@ -14,7 +14,7 @@
           :index="levelone.index">
           <template #title>
             <span class="menu-subtitle">
-              <span class="iconfont icon-yitihuajiankong"></span>
+              <!-- <span class="iconfont icon-yitihuajiankong"></span> -->
               <span>{{ levelone.name || '' }}</span>
             </span>
           </template>
@@ -46,7 +46,7 @@ import type { IMenu } from '@/stores/menu'
 import { useMenu } from '@/stores/menu'
 
 const props = defineProps<{
-  menuTree: Array<IMenu>
+  menuTree?: Array<IMenu>
 }>()
 const menuStore = useMenu()
 const router = useRouter()
@@ -69,7 +69,17 @@ const menuTree = computed(() => {
           name: '关于',
         },
       ]
-    }
+    },
+    {
+      index: '/map',
+      name: '地图',
+      children: [
+        {
+          index: '/map/geojson',
+          name: '输出GeoJSON',
+        },
+      ]
+    },
   ]
 })
 const currentMenu = menuStore.currentMenu
@@ -103,7 +113,7 @@ $text-color: $text-hcolor;
   height: 100%;
   padding: $menu-padding 0;
   .menu-subtitle {
-    color: $text-color;
+    // color: $text-color;
     font-size: 18px;
     font-weight: bold;
   }
