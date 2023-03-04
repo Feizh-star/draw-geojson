@@ -41,6 +41,22 @@ const router = createRouter({
           },
           component: () => import('../views/DrawMap/DrawMapCanvas.vue')
         },
+        {
+          path: 'gptanswer',
+          name: 'gptanswer',
+          meta: {
+            title: '测试gptanswer'
+          },
+          component: () => import('../views/DrawMap/GptAnswer.vue')
+        },
+        {
+          path: 'testcanvas',
+          name: 'testcanvas',
+          meta: {
+            title: '测试testcanvas'
+          },
+          component: () => import('../views/DrawMap/TestCanvas.vue')
+        },
       ]
     },
     // {

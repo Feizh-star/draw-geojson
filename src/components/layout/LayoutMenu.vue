@@ -78,6 +78,14 @@ const menuTree = computed(() => {
           index: '/map/geojson',
           name: '输出GeoJSON',
         },
+        {
+          index: '/map/gptanswer',
+          name: '测试gptanswer',
+        },
+        {
+          index: '/map/testcanvas',
+          name: '测试canvas',
+        },
       ]
     },
   ]
