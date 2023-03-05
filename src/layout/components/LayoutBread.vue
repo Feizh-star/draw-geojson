@@ -20,11 +20,11 @@
 </template>
 
 <script setup lang="ts">
-import { useMenu } from '@/stores/menu'
+import { useMenuTree } from '@/stores/menu'
 import {
   computed
 } from 'vue'
-const menuStore = useMenu()
+const menuStore = useMenuTree()
 const currentMenu = computed(() => menuStore.currentMenu)
 function breadcrumbClick(menu: any, event: Event) {
   console.log(menu);

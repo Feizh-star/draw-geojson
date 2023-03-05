@@ -1,0 +1,41 @@
+[
+  {
+    "path": "/map",
+    "name": "map",
+    "component": "Layout",
+    "meta": {
+      "title": "map",
+      "hidden": false,
+      "alwaysShow": false
+    },
+    "children": [
+      {
+        "path": "geojson",
+        "name": "geojson",
+        "component": "DrawMap/DrawMapCanvas.vue",
+        "meta": {
+          "title": "输出GeoJSON",
+          "hidden": false
+        }
+      },
+      {
+        "path": "gptanswer",
+        "name": "gptanswer",
+        "component": "DrawMap/GptAnswer.vue",
+        "meta": {
+          "title": "测试gptanswer",
+          "hidden": false
+        }
+      },
+      {
+        "path": "testcanvas",
+        "name": "testcanvas",
+        "component": "DrawMap/TestCanvas.vue",
+        "meta": {
+          "title": "测试testcanvas",
+          "hidden": false
+        }
+      }
+    ]
+  }
+]

@@ -21,9 +21,9 @@ declare module '@vue/runtime-core' {
     IconEcosystem: typeof import('./src/components/icons/IconEcosystem.vue')['default']
     IconSupport: typeof import('./src/components/icons/IconSupport.vue')['default']
     IconTooling: typeof import('./src/components/icons/IconTooling.vue')['default']
-    LayoutBread: typeof import('./src/components/layout/LayoutBread.vue')['default']
-    LayoutHeader: typeof import('./src/components/layout/LayoutHeader.vue')['default']
-    LayoutMenu: typeof import('./src/components/layout/LayoutMenu.vue')['default']
+    LayoutBread: typeof import('./src/components/layout1/LayoutBread.vue')['default']
+    LayoutHeader: typeof import('./src/components/layout1/LayoutHeader.vue')['default']
+    LayoutMenu: typeof import('./src/components/layout1/LayoutMenu.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

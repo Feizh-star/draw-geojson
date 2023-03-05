@@ -6,12 +6,12 @@
     </div>
     <div class="ly-main">
       <div class="ly-main-menu">
-        <LayoutMenu></LayoutMenu>
+        <LayoutMenu :menu-List="menuList"></LayoutMenu>
       </div>
       <div class="ly-main-body">
         <div class="ly-main-body-inner">
           <div class="ly-main-body-breadcrumb">
-            <LayoutBread></LayoutBread>
+            <!-- <LayoutBread></LayoutBread> -->
           </div>
           <div class="ly-main-body-view">
             <RouterView></RouterView>
@@ -28,7 +28,7 @@ import { defineComponent } from 'vue'
 interface Components {
   [propName: string]: any;
 }
-const modules = import.meta.glob('@/components/layout/*.vue', { eager: true, import: 'default', })
+const modules = import.meta.glob('@/layout/components/*.vue', { eager: true, import: 'default', })
 const components: Components = {}
 Object.keys(modules).forEach(key => {
   const nameMatch = key.match(/(?<=\/)\w+(?=\.vue)/)
@@ -47,6 +47,9 @@ export default defineComponent({
 
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
+import { useMenuTree } from '@/stores/menu'
+const menu = useMenuTree()
+const menuList = menu.getMenuList
 </script>
 
 <style lang="scss" scoped>

@@ -1,98 +1,61 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import type { RouteRecordRaw } from 'vue-router'
+import Home from '../views/HomeView.vue'
+import { h } from 'vue'
 import Layout from '@/layout/Layout.vue'
-import { useMenu } from '@/stores/menu'
+import { useMenuTree } from '@/stores/menu'
+
+export const routes: Array<RouteRecordRaw> = [
+  {
+    path: '/',
+    component: Layout,
+    redirect: '/Home',
+    meta: {
+      hidden: true,
+    },
+    children: [
+      {
+        path: 'Home',
+        name: 'Home',
+        component: Home,
+        meta: {
+          title: 'Home',
+          hidden: true,
+        }
+      }
+    ]
+  },
+  {
+    path: '/404',
+    component: {
+      render() {
+        return h('div', ['404'])
+      }
+    },
+    meta: {
+      hidden: true,
+    },
+  },
+]
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [
-    {
-      path: '/',
-      component: Layout,
-      redirect: '/home',
-      children: [
-        {
-          path: 'home',
-          name: 'home',
-          meta: {
-            title: '首页'
-          },
-          component: () => import('../views/HomeView.vue')
-        },
-        {
-          path: 'about',
-          name: 'about',
-          meta: {
-            title: '关于'
-          },
-          component: () => import('../views/AboutView.vue')
-        },
-      ]
-    },
-    {
-      path: '/map',
-      component: Layout,
-      redirect: 'geojson',
-      children: [
-        {
-          path: 'geojson',
-          name: 'geojson',
-          meta: {
-            title: '输出GeoJSON'
-          },
-          component: () => import('../views/DrawMap/DrawMapCanvas.vue')
-        },
-        {
-          path: 'gptanswer',
-          name: 'gptanswer',
-          meta: {
-            title: '测试gptanswer'
-          },
-          component: () => import('../views/DrawMap/GptAnswer.vue')
-        },
-        {
-          path: 'testcanvas',
-          name: 'testcanvas',
-          meta: {
-            title: '测试testcanvas'
-          },
-          component: () => import('../views/DrawMap/TestCanvas.vue')
-        },
-      ]
-    },
-    // {
-    //   path: '/about',
-    //   name: 'about',
-    //   // route level code-splitting
-    //   // this generates a separate chunk (About.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   component: () => import('../views/AboutView.vue')
-    // }
-  ]
+  history: createWebHistory(),
+  routes,
+  sensitive: true,
 })
 
-// 执行到这里的时候，pinia还没有安装
-setTimeout(() => {
-  const menuStore = useMenu()
-  // eslint-disable-next-line
-  router.afterEach((to, from) => {
-    console.log(to)
-    const name = (to?.meta?.title || '') as string
-    menuStore.setCurrentMenu({
-      index: to.fullPath,
-      name: name,
-      // 目前没有在store中建立全局路由表，菜单也比较简单，所以第一层暂时写死
-      menuPath: [
-        {
-          index: '/menuone',
-          name: '目录一',
-        },
-        {
-          index: to.fullPath,
-          name: name,
-        }
-      ]
+router.beforeEach((to, from, next) => {
+  // 获取路由
+  const menu = useMenuTree()
+  if (menu.menuList.length === 0) {
+    menu.fetchMenuList().then(() => {
+      next({ path: to.path, replace: true })
     })
-  })
+  } else {
+    next()
+  }
+})
+router.afterEach((to, from) => {
 })
 
 export default router
