@@ -31,3 +31,27 @@
   else result._stack = stack 
   return result
 }
+
+export function download(filename: string, file: string | Blob) {
+  const a = document.createElement('a')
+  // blob.type = "application/octet-stream";
+  filename = filename || '1'
+  // @ts-ignore
+  if (window.navigator.msSaveBlob) {
+    try {
+      // @ts-ignore
+      window.navigator.msSaveBlob(file, filename)
+    } catch (e) {
+      console.log(e)
+    }
+  } else {
+    const url = typeof file === 'string' ? file : window.URL.createObjectURL(file)
+    a.href = url
+    a.download = filename
+    document.body.appendChild(a) // 火狐浏览器 必须把元素插入body中
+    a.click()
+    document.body.removeChild(a)
+    // 释放之前创建的URL对象
+    typeof file !== 'string' && window.URL.revokeObjectURL(url)
+  }
+}

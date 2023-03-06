@@ -7,6 +7,7 @@ import router from './router'
 import 'reset-css' // 重置样式
 import '@/assets/iconfont/iconfont.css'
 import '@/assets/iconfont-colorful/iconfont.css'
+import 'element-plus/dist/index.css'
 import { defaultStylePlugin } from '@/style/variables' // 全局默认样式
 
 const app = createApp(App)

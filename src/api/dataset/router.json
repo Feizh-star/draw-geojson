@@ -19,20 +19,20 @@
         }
       },
       {
-        "path": "gptanswer",
-        "name": "gptanswer",
-        "component": "DrawMap/GptAnswer.vue",
-        "meta": {
-          "title": "测试gptanswer",
-          "hidden": false
-        }
-      },
-      {
         "path": "testcanvas",
         "name": "testcanvas",
         "component": "DrawMap/TestCanvas.vue",
         "meta": {
           "title": "测试testcanvas",
+          "hidden": false
+        }
+      },
+      {
+        "path": "imagebygeojson",
+        "name": "imagebygeojson",
+        "component": "DrawMap/ImageByGeoJson.vue",
+        "meta": {
+          "title": "输出图片",
           "hidden": false
         }
       }

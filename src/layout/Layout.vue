@@ -6,7 +6,7 @@
     </div>
     <div class="ly-main">
       <div class="ly-main-menu">
-        <LayoutMenu :menu-List="menuList"></LayoutMenu>
+        <LayoutMenu :menu-list="menuList"></LayoutMenu>
       </div>
       <div class="ly-main-body">
         <div class="ly-main-body-inner">
