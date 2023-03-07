@@ -11,7 +11,7 @@
       <div class="ly-main-body">
         <div class="ly-main-body-inner">
           <div class="ly-main-body-breadcrumb">
-            <!-- <LayoutBread></LayoutBread> -->
+            <LayoutBread></LayoutBread>
           </div>
           <div class="ly-main-body-view">
             <RouterView></RouterView>
@@ -37,7 +37,7 @@ Object.keys(modules).forEach(key => {
     components[fileFullname] = modules[key]
   }
 })
-console.log(components)
+// console.log(components)
 export default defineComponent({
   components: {
     ...components
@@ -47,8 +47,8 @@ export default defineComponent({
 
 <script setup lang="ts">
 import { RouterView } from 'vue-router';
-import { useMenuTree } from '@/stores/menu'
-const menu = useMenuTree()
+import { useMenu } from '@/stores/menu'
+const menu = useMenu()
 const menuList = menu.getMenuList
 </script>
 

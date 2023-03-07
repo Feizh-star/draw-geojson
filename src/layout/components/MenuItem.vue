@@ -3,6 +3,7 @@ import type { RouteRecordRaw } from 'vue-router'
 import type { Ref, ComputedRef } from 'vue'
 import { watchEffect } from 'vue'
 import { ref, computed, watch } from 'vue'
+import AppLink from './AppLink.vue'
 import path from 'path-browserify'
 
 const resolvePath = (m: RouteRecordRaw): string => path.resolve('/', props.parentPath, m?.path || '')
@@ -43,11 +44,11 @@ export default {
 </script>
 
 <template>
-  <router-link v-if="!isHidden && renderMenuItem" :to="currentPath">
+  <AppLink v-if="!isHidden && renderMenuItem" :to="currentPath">
     <el-menu-item :index="currentPath">
       {{ getMenuTitle(showingItem as RouteRecordRaw) }}
     </el-menu-item>
-  </router-link>
+  </AppLink>
   <el-sub-menu v-if="!isHidden && !renderMenuItem" :index="currentPath">
     <template #title>{{ getMenuTitle(menuItem) }}</template>
     <MenuItem v-for="(item, index) in menuItem.children" :key="index" :menu-item="item"

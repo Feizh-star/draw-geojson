@@ -3,7 +3,7 @@ import type { IBounds, IResolutionRatio } from './convert/index'
 import type { UploadProps  } from 'element-plus'
 import { ref, reactive, computed, watch } from 'vue';
 import { Connection } from '@element-plus/icons'
-import { ElMessage } from 'element-plus'
+import { ElMessage, ElLoading } from 'element-plus'
 import { drawGeo, drawGeoInWorker } from './convert/index'
 import { download } from '@/utils/tools'
 
@@ -18,11 +18,32 @@ const upload = ref() // 上传组件
 // 输出图像相关的数据
 const backgroundColor = ref(defaultBackgroundColor) // 图片背景色
 const lineColor = ref(defaultLineColor) // 线条颜色
-const useWorker = ref(true) // 是否使用worker加速渲染
+const useWorker = ref(false) // 是否使用worker加速渲染
 const ranges = reactive<IBounds>({ // 范围
   lb: [90, -45],
   rt: [180, 45]
 })
+const minArea = ref('')
+const loading = ref(false)
+
+function limitNumber(value: number, min: number, max: number): number {
+  return value < min ? min : (value > max ? max : value)
+}
+function limitLatLng(e: string, type: string, pointKey: string, index: number) {
+  const inputVal = parseFloat(e)
+  if (!inputVal) return
+  let limitNum = 90
+  switch (type) {
+    case 'longitude':
+      limitNum = 180
+      break
+    case 'latitude':
+      limitNum = 90
+      break
+  }
+  // @ts-ignore
+  ranges[pointKey][index] = limitNumber(inputVal, -limitNum, limitNum)
+}
 /**
  * 点击“输出图片按钮”事件
  */
@@ -41,17 +62,21 @@ function drawDataInCanvas(data: any) {
   const originData = {
     geoData: data, 
     bounds: ranges, 
+    minArea: parseFloat(minArea.value) || 0,
     resolutionRatio: resolutionRatio,
     backgroundColor: backgroundColor.value,
     lineColor: lineColor.value,
   }
-  console.log(useWorker.value)
   if (useWorker.value) { // 在worker中渲染
+    loading.value = true
     drawGeoInWorker(originData).then(resultCanvas => {
       convertCanvasToImage(resultCanvas)
+      loading.value = false
     })
   } else { // 同步渲染
+    loading.value = true
     const resultCanvas = drawGeo(originData)
+    loading.value = false
     convertCanvasToImage(resultCanvas)
   }
 }
@@ -149,39 +174,41 @@ function colorPickerChange(e: string, tp: 'background' | 'line') {
     <section class="btns">
       <div class="select-file">
         <el-form :inline="true">
-          <el-form-item label="">
-            <el-upload
-              ref="upload"
-              accept=".json, .geojson"
-              :show-file-list="false"
-              :multiple="false"
-              :limit="1"
-              :on-change="selectFile"
-              :auto-upload="false"
-            >
-              <template #trigger>
-                <el-button type="primary" @click="uploadClick">选择文件</el-button>
-              </template>
-            </el-upload>
+          <el-form-item label="经度范围:" class="range-start">
+            <el-input 
+              v-model.number="ranges.lb[0]" 
+              type="number" 
+              @input="(e: string) => limitLatLng(e, 'longitude', 'lb', 0)" 
+              style="width: 130px;" 
+              placeholder="起始经度"
+            ></el-input>
           </el-form-item>
-          <el-form-item label="">
-            <div class="files-list">
-              <div class="text-inner" :title="fileName">
-                <span>已选择：{{ fileName  || '' }}</span>
-              </div>
-            </div>
+          <el-form-item label="~">
+            <el-input 
+              v-model.number="ranges.rt[0]" 
+              type="number" 
+              @input="(e: string) => limitLatLng(e, 'longitude', 'rt', 0)" 
+              style="width: 130px;" 
+              placeholder="结束经度"
+            ></el-input>
           </el-form-item>
-          <el-form-item label="起始经度:">
-            <el-input v-model.number="ranges.lb[0]" type="number" style="width: 130px;" placeholder="起始经度"></el-input>
+          <el-form-item label="纬度范围:" class="range-start">
+            <el-input 
+              v-model.number="ranges.lb[1]" 
+              type="number" 
+              @input="(e: string) => limitLatLng(e, 'latitude', 'lb', 1)" 
+              style="width: 130px;" 
+              placeholder="起始纬度"
+            ></el-input>
           </el-form-item>
-          <el-form-item label="结束经度:">
-            <el-input v-model.number="ranges.rt[0]" type="number" style="width: 130px;" placeholder="结束经度"></el-input>
-          </el-form-item>
-          <el-form-item label="起始纬度:">
-            <el-input v-model.number="ranges.lb[1]" type="number" style="width: 130px;" placeholder="起始纬度"></el-input>
-          </el-form-item>
-          <el-form-item label="结束纬度:">
-            <el-input v-model.number="ranges.rt[1]" type="number" style="width: 130px;" placeholder="结束纬度"></el-input>
+          <el-form-item label="~">
+            <el-input 
+              v-model.number="ranges.rt[1]" 
+              type="number" 
+              @input="(e: string) => limitLatLng(e, 'latitude', 'rt', 1)" 
+              style="width: 130px;" 
+              placeholder="结束纬度"
+            ></el-input>
           </el-form-item>
           <el-form-item label="分辨率:">
             <el-input-number
@@ -206,6 +233,12 @@ function colorPickerChange(e: string, tp: 'background' | 'line') {
               :max="10000"
             ></el-input-number>
           </el-form-item>
+          <el-form-item label="过滤:" class="filter-input">
+            <el-input placeholder="指定最小面积" v-model="minArea">
+              <template #prepend>面积小于</template>
+              <template #append>Km²</template>
+            </el-input>
+          </el-form-item>
           <el-form-item label="背景颜色:">
             <el-color-picker v-model="backgroundColor" show-alpha @change="(e: string) => colorPickerChange(e, 'background')"></el-color-picker>
           </el-form-item>
@@ -215,6 +248,28 @@ function colorPickerChange(e: string, tp: 'background' | 'line') {
           <el-form-item label="worker:">
             <el-switch v-model="useWorker" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
           </el-form-item>
+          <el-form-item label="" style="margin-right: 10px;">
+            <el-upload
+              ref="upload"
+              accept=".json, .geojson"
+              :show-file-list="false"
+              :multiple="false"
+              :limit="1"
+              :on-change="selectFile"
+              :auto-upload="false"
+            >
+              <template #trigger>
+                <el-button type="primary" @click="uploadClick">选择文件</el-button>
+              </template>
+            </el-upload>
+          </el-form-item>
+          <el-form-item label="">
+            <div class="files-list">
+              <div class="text-inner" :title="fileName">
+                <span>已选择：{{ fileName  || '' }}</span>
+              </div>
+            </div>
+          </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="outputImage">输出图片</el-button>
           </el-form-item>
@@ -222,7 +277,7 @@ function colorPickerChange(e: string, tp: 'background' | 'line') {
       </div>
     </section>
     <section class="canvas-section">
-      <div class="result-img" ref="resultDiv"></div>
+      <div class="result-img" v-loading="loading" ref="resultDiv"></div>
     </section>
   </div>
 </template>
@@ -249,6 +304,14 @@ function colorPickerChange(e: string, tp: 'background' | 'line') {
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;
+        }
+      }
+      .range-start {
+        margin-right: 12px;
+      }
+      .filter-input {
+        :deep(.el-input__wrapper) {
+          width: 120px;
         }
       }
     }

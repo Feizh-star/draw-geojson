@@ -1,3 +1,5 @@
+import * as turf from '@turf/turf'
+
 export interface IResolutionRatio {
   x: number,
   y: number
@@ -14,24 +16,23 @@ export interface IBoundsRes extends IBounds {
   lngBoundCenter: number
   latBoundCenter: number
 }
-
-export function drawGeoInWorker({
-  geoData, 
-  bounds, 
-  resolutionRatio,
-  backgroundColor,
-  lineColor,
-}: {
-  geoData: any, 
-  bounds: IBounds, 
-  resolutionRatio: IResolutionRatio,
-  backgroundColor?: string,
+export interface IDrawProps {
+  geoData: any
+  bounds: IBounds
+  minArea: number
+  resolutionRatio: IResolutionRatio
+  backgroundColor?: string
   lineColor?: string
-}): Promise<HTMLCanvasElement> {
+}
+
+export function drawGeoInWorker({geoData, bounds, minArea, resolutionRatio, backgroundColor, lineColor }: IDrawProps): Promise<HTMLCanvasElement> {
   // worker
-  const worker = new Worker('/worker/ImageByGeoJson/convert.js')
+  const worker = new Worker(new URL('./worker.js?worker', import.meta.url), {
+    type: 'module',
+  })
   worker.postMessage({ 
     beyond: 'main',
+    minArea,
     geoData, 
     backgroundColor,
     lineColor,
@@ -49,27 +50,15 @@ export function drawGeoInWorker({
       canvas.width = resolutionRatio.x
       canvas.height = resolutionRatio.y
       
-      const bitmapContext = canvas.getContext("bitmaprenderer");
-      bitmapContext.transferFromImageBitmap(imageBitmap);
+      const bitmapContext = canvas.getContext("bitmaprenderer")
+      bitmapContext?.transferFromImageBitmap(imageBitmap)
 
       resolve(canvas)
     }
   })
 }
 
-export function drawGeo({
-  geoData, 
-  bounds, 
-  resolutionRatio,
-  backgroundColor,
-  lineColor,
-}: {
-  geoData: any, 
-  bounds: IBounds, 
-  resolutionRatio: IResolutionRatio,
-  backgroundColor?: string,
-  lineColor?: string
-}): HTMLCanvasElement {
+export function drawGeo({ geoData, bounds, minArea, resolutionRatio, backgroundColor, lineColor }: IDrawProps): HTMLCanvasElement {
   const canvas = document.createElement('canvas')
   const computedBoundInfo: IBoundsRes = computedBounds(bounds)
   const ctx = canvas.getContext("2d") as any;
@@ -83,21 +72,34 @@ export function drawGeo({
   canvas.style.height = resolutionRatio.y + 'px'
   canvas.width = resolutionRatio.x
   canvas.height = resolutionRatio.y
-  console.log(computedBoundInfo, resolutionRatio)
 
   ctx.fillStyle = backgroundColor || '#FFFFFF'
   ctx.strokeStyle = lineColor || '#000000'
   ctx.lineWidth = 1
   ctx.fillRect(0, 0, resolutionRatio.x, resolutionRatio.y)
   
+  const areas = []
   const time_start = new Date().getTime()
   for (let i = 0; i < coordinates.length; i++) {
     // console.log(coordinates[i][0])
-    drawEdge(canvas, computedBoundInfo, coordinates[i][0])
+    const line = coordinates[i][0]
+    const area = computeArea(line)
+    if (area < minArea * 10000000) {
+      areas.push(area)
+      continue
+    }
+    drawEdge(canvas, computedBoundInfo, line)
   }
   const time_end = new Date().getTime()
-  console.log('sync', time_end - time_start)
+  console.log('sync', time_end - time_start, areas.sort((a, b) => a - b))
   return canvas
+}
+
+// 计算线条围成的区域的面积
+function computeArea(line: Array<[number, number]>): number {
+  const polygon = turf.polygon([line.concat([line[0]])]);
+  const area = turf.area(polygon);
+  return area
 }
 
 // 计算边界和坐标转换参数

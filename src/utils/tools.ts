@@ -7,7 +7,7 @@
  *                   compare 需返回1个boolean值，如果为true，则代表找到了目标
  * @return {Object | null} node：找到的节点对象，其上会多1个’_stack'属性，是1个数组，代表了当前节点在树中的路径（即所有根先）
  */
- export function filterTreeNode(data: any, id: any, keys:any, compare: any, stack: any[] = []): any {
+export function filterTreeNode(data: any, id: any, keys: any, compare: any, stack: any[] = []): any {
   const childrenKey = keys?.children || 'children'
   let idKey = keys?.id || 'id'
   idKey = idKey.split('.')
@@ -16,7 +16,8 @@
   for (const node of data) {
     // 查找指定的键
     const nodeId = idKey.reduce((p: any, c: any) => p && p[c], node)
-    if( compareFunc(nodeId, id, node, stack)) {
+    const compareResult = compareFunc(nodeId, id, node, stack)
+    if(compareResult) {
       result = {...node}
       break
     } else if (node[childrenKey]) {

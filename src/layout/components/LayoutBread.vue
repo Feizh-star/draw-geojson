@@ -9,23 +9,23 @@
     <div class="bread-breadcrumb">
       <el-breadcrumb separator="/">
         <el-breadcrumb-item 
-          v-for="(item, index) in currentMenu.menuPath" 
+          v-for="(item, index) in currentMenuPath" 
           :key="index"
-          :class="{lastone: index === currentMenu.menuPath.length - 1}"
+          :class="{lastone: index === currentMenuPath.length - 1}"
           @click="(event: Event) => breadcrumbClick(item, event)"
-        >{{ item.name || '' }}</el-breadcrumb-item>
+        >{{ item.meta?.title || '' }}</el-breadcrumb-item>
       </el-breadcrumb>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useMenuTree } from '@/stores/menu'
+import { useMenu } from '@/stores/menu'
 import {
   computed
 } from 'vue'
-const menuStore = useMenuTree()
-const currentMenu = computed(() => menuStore.currentMenu)
+const menu = useMenu()
+const currentMenuPath = computed(() => menu.getRouteNodePath.filter(node => node?.meta?.title))
 function breadcrumbClick(menu: any, event: Event) {
   console.log(menu);
 }
@@ -69,10 +69,10 @@ $text-color: #666666;
     color: $text-color;
   }
   .el-breadcrumb__item {
-    cursor: pointer;
     .el-breadcrumb__inner {
       color: $text-color;
       font-size: 16px;
+      cursor: pointer !important;;
     }
     &.lastone .el-breadcrumb__inner {
       color: $text-hcolor;

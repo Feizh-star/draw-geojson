@@ -18,7 +18,8 @@
         </div>
       </div>
       <div class="header-icons">
-        <span class="iconfont icon-kaiguan"></span>
+        <!-- <span class="iconfont icon-kaiguan"></span> -->
+        <img src="@/assets/images/exit2x.png" style="width: 66%;">
       </div>
     </div>
   </header>
@@ -122,11 +123,12 @@ $left-shadow: 2px 0 6px 1px rgba(0, 0, 0, .2); // 头部左侧阴影
     .header-icons {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       padding-right: $default-space;
+      cursor: pointer;
       .icon-kaiguan {
         font-size: $icon-fs;
         color: #ffffff;
-        cursor: pointer;
       }
     }
     .user-info {

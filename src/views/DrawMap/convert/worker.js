@@ -1,8 +1,10 @@
+import * as turf from '@turf/turf'
 self.onmessage = function (e) {
   const {
     // beyond,
     geoData, 
     bounds, 
+    minArea,
     resolutionRatio,
     backgroundColor,
     lineColor,
@@ -12,6 +14,7 @@ self.onmessage = function (e) {
   draw({
     geoData, 
     bounds, 
+    minArea,
     resolutionRatio, 
     backgroundColor, 
     lineColor
@@ -21,6 +24,7 @@ self.onmessage = function (e) {
 function draw({
   geoData, 
   bounds, 
+  minArea,
   resolutionRatio,
   backgroundColor,
   lineColor,
@@ -35,19 +39,33 @@ function draw({
   ctx.lineWidth = 1
   ctx.fillRect(0, 0, resolutionRatio.x, resolutionRatio.y)
 
+  const areas = []
   const time_start = new Date().getTime()
   for (let i = 0; i < coordinates.length; i++) {
     // console.log(coordinates[i][0])
-    drawEdge(offscreen, computedBoundInfo, coordinates[i][0])
+    const line = coordinates[i][0]
+    const area = computeArea(line)
+    if (area < minArea * 10000000) {
+      areas.push(area)
+      continue
+    }
+    drawEdge(offscreen, computedBoundInfo, line)
   }
   const time_end = new Date().getTime()
-  console.log('async', time_end - time_start)
+  console.log('async', time_end - time_start, areas.sort((a, b) => a - b))
 
   const imageBitmap = offscreen.transferToImageBitmap();
   self.postMessage({
     beyond: 'worker',
     imageBitmap
   }, [imageBitmap])
+}
+
+// 计算线条围成的区域的面积
+function computeArea(line) {
+  const polygon = turf.polygon([line.concat([line[0]])]);
+  const area = turf.area(polygon);
+  return area
 }
 
 // 计算边界和坐标转换参数

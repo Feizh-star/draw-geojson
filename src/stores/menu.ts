@@ -8,17 +8,26 @@ import { routes as constants } from '@/router'
 import { getRoutes } from '@/api/menu'
 import Layout from '@/layout/Layout.vue'
 import RouterSocket from '@/layout/RouterSocket.vue'
+import pathModule from 'path-browserify'
 
 const pages = importPage()
 
 let socketIndex = 1
-export const useMenuTree = defineStore({
+export const useMenu = defineStore({
   id: 'menuTree',
   state: () => ({
-    menuList: <Array<RouteRecordRaw>>[],
+    menuList: [] as Array<RouteRecordRaw>,
+    currentMenu: {} as RouteRecordRaw,
+    routePath: [] as any[]
   }),
   getters: {
-    getMenuList: (state) => state.menuList
+    getMenuList: (state) => state.menuList,
+    getCurrentMenu: (state) => state.currentMenu,
+    getRouteNodePath: (state) => state.routePath,
+    getRoutePath() {
+      // @ts-ignore
+      return pathModule.join(...this.getRouteNodePath.map(node => node.path))
+    }
   },
   actions: {
     async fetchMenuList() {
@@ -33,10 +42,16 @@ export const useMenuTree = defineStore({
           redirect: '/404',
           meta: { hidden: true, }
         })
-        console.log(this.menuList)
+        // console.log(this.menuList)
       } catch (error) {
         console.error(error)
       }
+    },
+    setCurrentMenu(crtMenu: RouteRecordRaw) {
+      this.currentMenu = crtMenu
+    },
+    setRoutePath(rPath: any[]) {
+      this.routePath = rPath
     }
   }
 })
