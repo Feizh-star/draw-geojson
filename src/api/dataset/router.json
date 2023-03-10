@@ -10,29 +10,29 @@
     },
     "children": [
       {
-        "path": "geojson",
-        "name": "geojson",
-        "component": "DrawMap/DrawMapCanvas.vue",
+        "path": "imagebygeojson",
+        "name": "imagebygeojson",
+        "component": "CanvasImage/ImageByGeoJson/Index.vue",
         "meta": {
-          "title": "输出GeoJSON",
+          "title": "输出图片",
+          "hidden": false
+        }
+      },
+      {
+        "path": "truftest",
+        "name": "truftest",
+        "component": "CanvasImage/TrufTest/Index.vue",
+        "meta": {
+          "title": "测试truf",
           "hidden": false
         }
       },
       {
         "path": "testcanvas",
         "name": "testcanvas",
-        "component": "DrawMap/TestCanvas.vue",
+        "component": "CanvasImage/TestCanvas.vue",
         "meta": {
-          "title": "测试testcanvas",
-          "hidden": false
-        }
-      },
-      {
-        "path": "imagebygeojson",
-        "name": "imagebygeojson",
-        "component": "DrawMap/ImageByGeoJson.vue",
-        "meta": {
-          "title": "输出图片",
+          "title": "测试canvas",
           "hidden": false
         }
       }

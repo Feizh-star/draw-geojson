@@ -1,0 +1,19 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "none",
+        "level": "none"
+      },
+      "geometry": {
+        "type": "MultiPoint",
+        "coordinates": [ 
+          [100.0, 0.0], 
+          [101.0, 1.0] 
+        ]
+    }
+    }
+  ]
+}
