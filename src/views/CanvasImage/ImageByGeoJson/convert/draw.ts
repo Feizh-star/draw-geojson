@@ -1,8 +1,6 @@
 import * as turf from '@turf/turf'
 import type { IAnyObject } from '@/types/global/common'
 import { simplify, truncate, judgeArea } from './turf'
-// 两种canvas联合
-export type UniCanvas = HTMLCanvasElement | OffscreenCanvas
 // 分辨率
 export interface IResolutionRatio {
   x: number,
@@ -33,7 +31,7 @@ export interface IDrawProps {
 }
 // drawImage所需要的参数类型，比IDrawProps多了一个canvas元素
 export interface IDrawImageProps extends IDrawProps {
-  canvas: UniCanvas
+  canvas: HTMLCanvasElement
 }
 
 /**
@@ -49,7 +47,7 @@ export function drawImage({
   resolutionRatio, 
   colorInfo,
   shadowInfo
-}: IDrawImageProps): UniCanvas {
+}: IDrawImageProps): HTMLCanvasElement {
   const { minArea, tolerance, precision, highQuality, includeZ } = simpleInfo
   const { backgroundColor, lineColor, fillColor, lineWidth } = colorInfo
   const bgc = backgroundColor || '#FFFFFF'
@@ -86,7 +84,7 @@ export function drawImage({
 }
 
 export function drawFeature(
-  canvas: UniCanvas,
+  canvas: HTMLCanvasElement,
   computedBoundInfo: IBoundsRes, 
   edgeCoords: turf.helpers.Feature<unknown, turf.helpers.Properties>,
   shadow: IAnyObject
@@ -108,7 +106,7 @@ export function drawFeature(
 
 // 绘制一个线条
 export function drawLineString(
-  canvas: UniCanvas,
+  canvas: HTMLCanvasElement,
   computedBoundInfo: IBoundsRes, 
   edgeCoords: turf.helpers.Feature<unknown, turf.helpers.Properties>,
   shadow: IAnyObject
@@ -127,7 +125,7 @@ export function drawLineString(
 
 // 绘制一个多边型
 export function drawPolygon(
-  canvas: UniCanvas,
+  canvas: HTMLCanvasElement,
   computedBoundInfo: IBoundsRes, 
   edgeCoords: turf.helpers.Feature<unknown, turf.helpers.Properties>,
   shadow: IAnyObject
@@ -148,7 +146,7 @@ export function drawPolygon(
 }
 
 // 绘制阴影
-function renderShadow(canvas: UniCanvas, shadow: IAnyObject): void {
+function renderShadow(canvas: HTMLCanvasElement, shadow: IAnyObject): void {
   const {
     sOffsetX, // 阴影水平距离-经度
     sOffsetY, // 阴影垂直距离-纬度

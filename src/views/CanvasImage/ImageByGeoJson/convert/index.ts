@@ -1,5 +1,5 @@
 import { drawImage } from './draw'
-import type { UniCanvas, IDrawProps } from './draw'
+import type { IDrawProps } from './draw'
 
 export function drawGeoInWorker({geoData, bounds, simpleInfo, resolutionRatio, colorInfo, shadowInfo }: IDrawProps): Promise<HTMLCanvasElement> {
   // worker
@@ -34,7 +34,7 @@ export function drawGeoInWorker({geoData, bounds, simpleInfo, resolutionRatio, c
   })
 }
 
-export function drawGeo(drawProps: IDrawProps): UniCanvas {
+export function drawGeo(drawProps: IDrawProps): HTMLCanvasElement {
   const { resolutionRatio } = drawProps
   const canvas = document.createElement('canvas')
   // 设置 Canvas 大小
