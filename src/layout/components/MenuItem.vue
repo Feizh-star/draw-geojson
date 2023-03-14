@@ -19,7 +19,7 @@ const props = defineProps<{
 const showingItem = ref<RouteRecordRaw | null>()
 const renderMenuItem: ComputedRef<boolean> = computed(() => !!showingItem.value)
 const isHidden: ComputedRef<boolean> = computed(() => !!(props.menuItem.meta && props.menuItem.meta.hidden))
-const currentPath: ComputedRef<string> = computed(() => resolvePath(showingItem.value as RouteRecordRaw))
+const currentPath: ComputedRef<string> = computed(() => resolvePath(props.menuItem as RouteRecordRaw))
 watchEffect(() => hasNextLevelMenu(props.menuItem))
 
 function hasNextLevelMenu(m: RouteRecordRaw): void {
