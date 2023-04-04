@@ -82,7 +82,6 @@
     "path": "/onebodym",
     "name": "onebodym",
     "component": "Layout",
-    "redirect": "/hardmoni",
     "meta": {
       "title": "一体化监控",
       "hidden": false,
