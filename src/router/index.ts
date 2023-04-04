@@ -8,25 +8,25 @@ import { filterTreeNode } from '@/utils/tools'
 import pathModule from 'path-browserify'
 
 export const routes: Array<RouteRecordRaw> = [
-  {
-    path: '/',
-    component: Layout,
-    redirect: '/home',
-    meta: {
-      hidden: true,
-    },
-    children: [
-      {
-        path: 'home',
-        name: 'Home',
-        component: Home,
-        meta: {
-          title: 'Home',
-          hidden: true,
-        }
-      }
-    ]
-  },
+  // {
+  //   path: '/',
+  //   component: Layout,
+  //   redirect: '/home',
+  //   meta: {
+  //     hidden: true,
+  //   },
+  //   children: [
+  //     {
+  //       path: 'home',
+  //       name: 'Home',
+  //       component: Home,
+  //       meta: {
+  //         title: 'Home',
+  //         hidden: true,
+  //       }
+  //     }
+  //   ]
+  // },
   {
     path: '/404',
     component: {

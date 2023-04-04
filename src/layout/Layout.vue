@@ -109,4 +109,15 @@ $main-bgc: #f7f7f7; // 浅灰背景色
     }
   }
 }
+.layout .ly-main .ly-main-menu :deep(.menu-icon) {
+  .iconfont {
+    &.icon-yitihuajiankong {
+      font-size: 20px;
+      margin-right: 10px;
+    }
+    &.icon-yuandianxiao-copy {
+      font-size: 28px;
+    }
+  }
+}
 </style>

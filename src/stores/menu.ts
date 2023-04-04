@@ -1,5 +1,4 @@
-import type { RouteRecordRaw } from 'vue-router'
-import type { DefineComponent } from 'vue'
+import type { RouteRecordRaw, RouteComponent } from 'vue-router'
 import type { Router } from '@/types/router/router'
 import { defineStore } from 'pinia'
 
@@ -65,7 +64,7 @@ export const useMenu = defineStore({
 function parseRoutes(routes: Router.MyRawRoute[], parent: string = ''): RouteRecordRaw[] {
   const parsedRoutes: RouteRecordRaw[] = []
   for (const raw of routes) {
-    let component: DefineComponent<{}, {}, any> | (() => Promise<any>)
+    let component: RouteComponent | (() => Promise<RouteComponent>)
     if (raw.component === 'Layout') {
       component = Layout
     } else if (raw.component === 'RouterSocket') {
@@ -83,12 +82,12 @@ function parseRoutes(routes: Router.MyRawRoute[], parent: string = ''): RouteRec
       component: component,
       name: raw.name,
       meta: raw.meta,
+      redirect: raw.redirect || '',
+      children: []
     }
     router.addRoute(parent, parsedRoute)
     parsedRoutes.push(parsedRoute)
-    if (raw.children) {
-      parsedRoute.children = parseRoutes(raw.children, raw.name) as any
-    }
+    parsedRoute.children = parseRoutes(raw.children || [], raw.name)
   }
   return parsedRoutes
 }

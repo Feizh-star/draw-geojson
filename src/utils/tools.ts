@@ -56,3 +56,20 @@ export function download(filename: string, file: string | Blob) {
     typeof file !== 'string' && window.URL.revokeObjectURL(url)
   }
 }
+
+/**
+ * 防抖
+ * @param fn 回调函数
+ * @param delay 延时
+ * @returns 
+ */
+export function debounce(fn: (...args: any[]) => any, delay: number) {
+  let timer: NodeJS.Timeout | null = null
+  return function (this: any, ...args: any[]) {
+    if (timer) clearTimeout(timer)
+    timer = setTimeout(() => {
+      timer = null
+      fn.call(this, ...args)
+    }, delay)
+  }
+}

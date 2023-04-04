@@ -2,7 +2,7 @@
   <header class="layout-header">
     <div class="header-left">
       <div class="header-title">
-        测试平台
+        draw-geojson
       </div>
       <div class="header-time">
         {{ currentTime }}
@@ -78,8 +78,8 @@ $icon-fs: 28px; // 右侧大icon大小
 $default-space: 5px; // 默认小间距
 $left-skew: 40deg; // 倾斜角度
 
-$header-left-bgc: #4371c1; // header左侧背景色
-$header-bgc: #436cb0; // 头部背景色
+$header-left-bgc: linear-gradient(90deg, #276bb4, #2b93ff); // header左侧背景色
+$header-bgc: #3b7abd; // 头部背景色
 $text-color: #ffffff; // 文本颜色
 $left-shadow: 2px 0 6px 1px rgba(0, 0, 0, .2); // 头部左侧阴影
 
@@ -102,7 +102,7 @@ $left-shadow: 2px 0 6px 1px rgba(0, 0, 0, .2); // 头部左侧阴影
     display: flex;
     padding-left: $header-pl;
     padding-right: $header-pr;
-    background-color: $header-left-bgc;
+    background: $header-left-bgc;
     transform-origin: 0px 0px;
     transform: skew(#{-$left-skew}, 0deg);
     box-shadow: $left-shadow;

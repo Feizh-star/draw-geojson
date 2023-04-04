@@ -1,0 +1,124 @@
+[
+  {
+    "path": "/",
+    "name": "outputgeojson",
+    "component": "Layout",
+    "redirect": "/imagebygeojson",
+    "meta": {
+      "title": "输出GeoJson",
+      "hidden": false,
+      "alwaysShow": false
+    },
+    "children": [
+      {
+        "path": "imagebygeojson",
+        "name": "imagebygeojson",
+        "component": "CanvasImage/ImageByGeoJson/Index.vue",
+        "meta": {
+          "title": "输出图片",
+          "hidden": false
+        }
+      },
+      {
+        "path": "truftest",
+        "name": "truftest",
+        "component": "CanvasImage/TrufTest/Index.vue",
+        "meta": {
+          "title": "测试truf",
+          "hidden": false
+        }
+      },
+      {
+        "path": "testcanvas",
+        "name": "testcanvas",
+        "component": "CanvasImage/TestCanvas.vue",
+        "meta": {
+          "title": "测试canvas",
+          "hidden": false
+        }
+      }
+    ]
+  },
+  {
+    "path": "/leaflet",
+    "name": "leaflet",
+    "component": "Layout",
+    "meta": {
+      "title": "地图",
+      "hidden": false,
+      "alwaysShow": false
+    },
+    "children": [
+      {
+        "path": "testmap",
+        "name": "testmap",
+        "component": "Leaflet/TestMap/Index.vue",
+        "meta": {
+          "title": "地图测试",
+          "hidden": false
+        }
+      },
+      {
+        "path": "stain",
+        "name": "stain",
+        "component": "Leaflet/Stain/Index.vue",
+        "meta": {
+          "title": "色斑图",
+          "hidden": false
+        }
+      },
+      {
+        "path": "typhoon",
+        "name": "typhoon",
+        "component": "Leaflet/Typhoon/Index.vue",
+        "meta": {
+          "title": "台风",
+          "hidden": false
+        }
+      }
+    ]
+  },
+  {
+    "path": "/onebodym",
+    "name": "onebodym",
+    "component": "Layout",
+    "redirect": "/hardmoni",
+    "meta": {
+      "title": "一体化监控",
+      "hidden": false,
+      "alwaysShow": false,
+      "icon": {
+        "type": "class",
+        "value": "iconfont icon-yitihuajiankong"
+      }
+    },
+    "children": [
+      {
+        "path": "hardmoni",
+        "name": "hardmoni",
+        "component": "HardMoni/Index.vue",
+        "meta": {
+          "title": "硬件监控",
+          "hidden": false,
+          "icon": {
+            "type": "class",
+            "value": "iconfont icon-yuandianxiao-copy"
+          }
+        }
+      },
+      {
+        "path": "anowarn",
+        "name": "anowarn",
+        "component": "AnoWarn/Index.vue",
+        "meta": {
+          "title": "异常告警",
+          "hidden": false,
+          "icon": {
+            "type": "class",
+            "value": "iconfont icon-yuandianxiao-copy"
+          }
+        }
+      }
+    ]
+  }
+]

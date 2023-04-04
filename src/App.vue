@@ -1,9 +1,12 @@
 <script setup lang="ts">
 import { RouterView } from 'vue-router'
+import zhCn from 'element-plus/lib/locale/lang/zh-cn'
 </script>
 
 <template>
-  <RouterView />
+  <el-config-provider :locale="zhCn">
+    <RouterView />
+  </el-config-provider>
 </template>
 
 <style scoped>
@@ -25,5 +28,22 @@ body,
 }
 * {
   box-sizing: border-box;
+}
+
+.page-container {
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  .page-btns {
+    padding-bottom: 8px;
+  }
+  .page-main {
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+  }
 }
 </style>

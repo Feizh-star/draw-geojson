@@ -14,6 +14,11 @@ export default defineConfig({
     vue(), 
     vueJsx(),
     AutoImport({
+      dts: "auto-imports.d.ts",
+      eslintrc: {
+        enabled: false
+      },
+      imports: ['vue', 'vue-router'],
       resolvers: [ElementPlusResolver()],
     }),
     Components({
@@ -22,7 +27,12 @@ export default defineConfig({
   ],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      process: "process/browser",
+      stream: "stream-browserify",
+      zlib: "browserify-zlib",
+      util: 'util',
+      crypto: 'crypto-browserify'
     }
   },
   css: {
